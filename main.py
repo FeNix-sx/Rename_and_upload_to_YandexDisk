@@ -19,6 +19,19 @@ def main():
 
         list_jpg = tool_func.get_files_jpg()
 
+        while True:
+            racurs = input("C каким ракурсом работаем? Введите число от 1 до 4: ")
+            if racurs not in ("1", "2", "3", "4"):
+                print("Невозможное значение ракурса принта")
+            else:
+                break
+
+        for file_jpg in list_jpg:
+            tool_class.MoveFile(
+                new_dir=folder_name
+            ).move_and_rename_file(
+                old_name=file_jpg, racurs=racurs
+            )
 
 
     except ValueError:

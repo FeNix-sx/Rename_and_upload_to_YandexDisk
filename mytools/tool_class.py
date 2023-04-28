@@ -1,5 +1,8 @@
 import csv
 import os
+import shutil
+import re
+
 
 class CodeNamePhone:
     def __init__(self, filename):
@@ -91,3 +94,28 @@ class FindCodeName:
                     return value
 
 
+class MoveFile:
+    def __init__(self, new_dir:str):
+        self.__new_dir = new_dir
+        self.__current_dir = os.getcwd()
+        self.__new_dir_path = os.path.join(self.__current_dir, self.__new_dir)
+
+    def __get_new_name(self, name: str, racurs:str) ->str:
+        # racurs = input("C каким ракурсом работаем? Введите число от 1 до 4: ")
+        pref = "" if racurs in ("1", 1) else f"_{racurs}"
+        regex = r"\d+"
+        res = re.findall(regex, name)[0]
+        new_name = f"{self.__new_dir}-d012#{str(res).rjust(3,'0')}{pref}.jpg"
+        return new_name
+
+    def move_and_rename_file(self, old_name:str, racurs:str):
+        try:
+            new_name = self.__get_new_name(old_name, racurs)
+            old_file_path = os.path.join(self.__current_dir, old_name)
+            new_file_path = os.path.join(self.__new_dir_path, new_name)
+            shutil.move(old_file_path, new_file_path)
+            print(f"Файл {old_name} переименован в {new_name}\n"
+                  f"и перемещен в папку {new_file_path}")
+
+        except Exception as ex:
+            print(f"{ex}")
