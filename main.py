@@ -7,7 +7,7 @@ def manual_mode() -> None:
         # запрос номера ракурса
         while True:
             racurs = input("C каким ракурсом работаем? Введите число от 1 до 4: ")
-
+            # if racurs != "1" and racurs != "2" and racurs != "3" and racurs != "4":
             if racurs not in ("1", "2", "3", "4"):
                 print("Невозможное значение ракурса принта")
             else:
@@ -97,6 +97,7 @@ def auto_mode() -> None:
         match choice:
             case "y" | "yes" | "да"| "д" | "н":
                 print("Перенос на яндекс диск")
+                tool_func.upload_to_yadick(folder_name=folder_name)
                 break
             case "n" | "no" | "нет"| "т":
                 print("Завершение работы программы")
