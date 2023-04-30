@@ -2,6 +2,8 @@ import csv
 import os
 import shutil
 import re
+from colorama import init, Fore, Style
+init(autoreset=True)
 
 
 class CodeNamePhone:
@@ -15,7 +17,7 @@ class CodeNamePhone:
             print("Ошибка! Не найден файл 'models.csv', или имя файла изменено!")
 
     @property
-    def get_names_code(self) -> dict|bool:
+    def get_names_code(self) -> dict:
         """
         Читает модели телефона возвращает словарь с ними:
         ключ - название (вместо "/" пробел)
@@ -45,7 +47,7 @@ class CodeNamePhone:
         except Exception as ex:
             print(ex)
             print("Не удалось загрузить список смартфоном. Возможно отсутствует файл 'models.csv'")
-            return False
+            return None
 
 
 class NamesFolder:
@@ -67,8 +69,9 @@ class NamesFolder:
 
         except ValueError:
             print(
-                f"Ошибка! Должна быть одна папка с названием/кодом телефона.\n"
-                f"Проверьте название или удалите лишние папки."
+                Fore.LIGHTRED_EX + f"Ошибка! Должна быть одна папка с названием/кодом телефона.\n",
+                Fore.LIGHTRED_EX + f"Проверьте наличие папки, её название или удалите лишние папки.",
+                sep=''
             )
             return False
 
@@ -114,8 +117,8 @@ class MoveFile:
             old_file_path = os.path.join(self.__current_dir, old_name)
             new_file_path = os.path.join(self.__new_dir_path, new_name)
             shutil.move(old_file_path, new_file_path)
-            print(f"Файл {old_name} переименован в {new_name}\n"
-                  f"и перемещен в папку {new_file_path}")
+            # print(f"Файл {old_name} переименован в {new_name}\n"
+            #       f"и перемещен в папку {new_file_path}")
 
         except Exception as ex:
-            print(f"{ex}")
+            print(Fore.LIGHTRED_EX + f"{ex}")
