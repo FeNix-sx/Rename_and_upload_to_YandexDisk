@@ -31,8 +31,11 @@ def upload_to_yadick(folder_name:str):
     if FOLDER_PATH != "":
         if not yadisk.is_dir(f"{FOLDER_PATH}"):
             yadisk.mkdir(f"{FOLDER_PATH}")
-            yadisk.mkdir(f"{FOLDER_PATH}/{folder_name}/")
-            path_name = f"{FOLDER_PATH}/{folder_name}/"
+        else:
+            if not yadisk.is_dir(f"{FOLDER_PATH}/{folder_name}/"):
+                yadisk.mkdir(f"{FOLDER_PATH}/{folder_name}/")
+
+        path_name = f"{FOLDER_PATH}/{folder_name}/"
     else:
         if not yadisk.is_dir(f"{folder_name}/"):
             yadisk.mkdir(f"{folder_name}/")
