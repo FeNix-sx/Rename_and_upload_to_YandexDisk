@@ -2,6 +2,8 @@ import csv
 import os
 import shutil
 import re
+import time
+
 from colorama import init, Fore, Style
 init(autoreset=True)
 
@@ -59,13 +61,27 @@ class NamesFolder:
             foldername = [
                 folder for folder in os.listdir('.') \
                 if os.path.isdir(folder) and folder not in (
-                    '.git', '.idea','venv', 'mytools'
+                    '.git', '.idea','venv', 'mytools', 'output'
                 )
             ]
-            if len(foldername) == 1:
-                return str(foldername[0])
-            else:
+            if len(foldername) != 1:
                 raise ValueError
+
+            old_name = foldername[0]
+
+            # получаем словарь: ключ - название телефона, значение - код соот-й названию
+            names_codes_dict: dict = CodeNamePhone("models.csv").get_names_code
+            if not names_codes_dict:
+                raise None
+
+            # убеждаемся, что название или код есть в таблице (базе телефонов) файла models.csv
+            code_name = FindCodeName(
+                names_codes=names_codes_dict,
+                foldername=old_name
+            ).get_code
+
+            self.__rename_folder(old_name, code_name)
+            return code_name
 
         except ValueError:
             print(
@@ -73,10 +89,14 @@ class NamesFolder:
                 Fore.LIGHTRED_EX + f"Проверьте наличие папки, её название или удалите лишние папки.",
                 sep=''
             )
+            time.sleep(3)
             return False
 
+    def __rename_folder(self, old_name: str, new_name: str) -> None:
+        os.rename(old_name, new_name)
+
     @property
-    def get_code_name(self):
+    def get_code_name(self) -> str:
         return self.__foldername
 
 
