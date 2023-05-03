@@ -14,17 +14,36 @@ def get_files_jpg(folder: str="") -> list:
 
 
 def upload_to_yadick(folder_name:str):
-    dotenv_path = 'setting.env'
+    # загрузка параметров: FOLDER_PATH - папка, в которую сохранится folder_name на яддекс_диске
+    # YANDEX_TOKEN - токен яндекс REST API
+    while True:
+        try:
+            dotenv_path = 'setting.env'
 
-    if os.path.exists(dotenv_path):
-        load_dotenv(dotenv_path)
+            if os.path.exists(dotenv_path):
+                load_dotenv(dotenv_path)
 
-    FOLDER_PATH = os.getenv('FOLDER_PATH')
-    YANDEX_TOKEN = os.getenv('YANDEX_TOKEN')
+            FOLDER_PATH = os.getenv('FOLDER_PATH')
+            YANDEX_TOKEN = os.getenv('YANDEX_TOKEN')
+
+            if YANDEX_TOKEN == "":
+                raise ValueError
+            break
+
+        except Exception as ex:
+            print(Fore.LIGHTRED_EX + f"Ошибка! {ex}")
+            print(Fore.LIGHTRED_EX + f"Проверьте наличие файла 'setting.env' и наличие в нём параметра YANDEX_TOKEN.")
+            if input(Fore.CYAN + Style.BRIGHT + "Повторить попытку? (y/n)") == "y":
+                continue
+            else:
+                return
+
     yadisk = YaDisk(token=YANDEX_TOKEN)
 
     if yadisk.check_token():
         print("Connection to YD")
+    else:
+        print(Fore.LIGHTRED_EX + f"Ошибка!\nНе удалось подключиться к яндекс-диску.")
 
     path_name = ""
     # создаем папку на яндекс-диске, если ее там нет
