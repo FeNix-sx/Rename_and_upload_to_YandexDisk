@@ -4,6 +4,7 @@ import shutil
 import re
 import time
 
+from dotenv import load_dotenv
 from colorama import init, Fore, Style
 init(autoreset=True)
 
@@ -124,11 +125,36 @@ class MoveFile:
         self.__new_dir_path = os.path.join(self.__current_dir, self.__new_dir)
 
     def __get_new_name(self, name: str, racurs:str) ->str:
+        # загрузка параметров: FOLDER_PATH - папка, в которую сохранится folder_name на яддекс_диске
+        while True:
+            try:
+                dotenv_path = 'setting.env'
+
+                if os.path.exists(dotenv_path):
+                    load_dotenv(dotenv_path)
+
+                PREFIX = os.getenv('PREFIX')
+
+                if PREFIX == "":
+                    raise ValueError
+                break
+
+
+
+            except Exception as ex:
+                print(Fore.LIGHTRED_EX + f"Ошибка! {ex}")
+                print(
+                    Fore.LIGHTRED_EX + f"Проверьте наличие файла 'setting.env' и наличие в нём параметра PREFIX.")
+                if input(Fore.CYAN + Style.BRIGHT + "Повторить попытку? (y/n)") == "y":
+                    continue
+                else:
+                    return
+
         # racurs = input("C каким ракурсом работаем? Введите число от 1 до 4: ")
         pref = "" if racurs in ("1", 1) else f"_{racurs}"
         regex = r"\d+"
         res = re.findall(regex, name)[0]
-        new_name = f"{self.__new_dir}-d012#{str(res).rjust(3,'0')}{pref}.jpg"
+        new_name = f"{self.__new_dir}-{PREFIX}#{str(res).rjust(3,'0')}{pref}.jpg"
         return new_name
 
     def move_and_rename_file(self, old_name:str, racurs:str):

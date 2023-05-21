@@ -4,6 +4,7 @@ from colorama import init, Fore, Style
 init(autoreset=True)
 from mytools import tool_class, tool_func
 
+print(Fore.CYAN + Style.BRIGHT + "version_v1.1")
 
 def manual_mode(folder_name) -> None:
     try:
