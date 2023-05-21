@@ -152,6 +152,7 @@ class MoveFile:
 
         # racurs = input("C каким ракурсом работаем? Введите число от 1 до 4: ")
         pref = "" if racurs in ("1", 1) else f"_{racurs}"
+        # имя файла 001.jpg, 052.jpg и т.д.
         regex = r"\d+"
         res = re.findall(regex, name)[0]
         new_name = f"{self.__new_dir}-{PREFIX}#{str(res).rjust(3,'0')}{pref}.jpg"
